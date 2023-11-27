@@ -1,0 +1,135 @@
+{
+  "jobType": "ETL_DQ",
+  "session": {
+    "sessionType": "local",
+    "applicationName": "test-application",
+    "icebergSupport": true,
+    "icebergCatalogs": [
+      {
+        "catalogName": "source_catalog",
+        "warehouse": "source_warehouse_path",
+        "catalogType": "hadoop"
+      },
+      {
+        "catalogName": "destination_catalog",
+        "warehouse": "dest_warehouse_path",
+        "catalogType": "glue"
+      }
+    ]
+  },
+  "jobConfiguration": {
+    "sources": [
+      {
+        "id": "source1",
+        "detail": {
+          "format": "jdbc",
+          "options": {
+            "url": "jdbc:mysql://localhost:3306",
+            "driver": "com.mysql.jdbc.Driver",
+            "db": "db",
+            "user": "user",
+            "password": "password"
+          }
+        },
+        "bookmarkConf": {
+          "bookmarkDetail": {
+            "bookmarkEntry": "source1",
+            "bookmarkField": "updatedAt",
+            "bookmarkFieldType": "Long"
+          },
+          "bookmarkStorage": {
+            "id": "bookmarks",
+            "storageType": "OS",
+            "detail": {
+              "catalogName": "bookmark_catalog",
+              "dbName": "db",
+              "tableName": "bookmarks",
+              "provider": "iceberg",
+              "options": {
+                "write.format.default": "parquet",
+                "format-version": "2",
+                "write.parquet.compression-codec": "lz4"
+              }
+            }
+          }
+        }
+      },
+      {
+        "id": "source2",
+        "detail": {
+          "catalogName": "source_catalog",
+          "dbName": "source_db",
+          "tableName": "source_table",
+          "provider": "iceberg"
+        },
+        "bookmarkConf": {
+          "bookmarkDetail": {
+            "bookmarkEntry": "source2",
+            "bookmarkField": "extracted",
+            "bookmarkFieldType": "Date",
+            "bookmarkFieldFormat": "YYYY/mm/dd"
+          },
+          "bookmarkStorage": {
+            "id": "bookmarks",
+            "storageType": "OS",
+            "detail": {
+              "catalogName": "bookmark_catalog",
+              "dbName": "db",
+              "tableName": "bookmarks",
+              "provider": "iceberg",
+              "options": {
+                "write.format.default": "parquet",
+                "format-version": "2",
+                "write.parquet.compression-codec": "lz4"
+              }
+            }
+          }
+        }
+      }
+    ],
+    "dataDestination": {
+      "id": "destination",
+      "detail": {
+        "format": "parquet",
+        "options": {
+          "path": "data_destination_path"
+        },
+        "mode": "Append",
+        "partitionKeys": [
+          "field1",
+          "field2"
+        ]
+      }
+    },
+    "badDataDestination": {
+      "id": "badDestination",
+      "detail": {
+        "format": "parquet",
+        "options": {
+          "path": "bad_data_destination_path"
+        },
+        "mode": "Append",
+        "partitionKeys": [
+          "field1",
+          "field2"
+        ]
+      }
+    },
+    "reportDestination": {
+      "id": "reportDestination",
+      "detail": {
+        "format": "parquet",
+        "options": {
+          "path": "report_destination_path"
+        },
+        "mode": "Append",
+        "partitionKeys": [
+          "field1",
+          "field2"
+        ]
+      }
+    },
+    "etlStrategyClass": "it.jobtech.jtetl.core.strategy.JtIdentityEtlStrategy",
+    "dqStrategyClass": "it.jobtech.jtetl.core.strategy.PeopleDqStrategy"
+  }
+}
