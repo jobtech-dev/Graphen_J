@@ -94,7 +94,7 @@
         "dbName": "destination_db",
         "tableName": "destination_table",
         "mode": "Custom",
-        "integrationTableFunctionClass": "it.jobtech.jtetl.application.PeopleIntegrationTableFunction",
+        "integrationTableFunctionClass": "it.jobtech.graphenj.application.PeopleIntegrationTableFunction",
         "provider": "iceberg",
         "options": {
           "write.format.default": "parquet",
@@ -103,6 +103,6 @@
         }
       }
     },
-    "etlStrategyClass": "it.jobtech.jtetl.core.strategy.JtIdentityEtlStrategy"
+    "etlStrategyClass": "it.jobtech.graphenj.core.strategy.JtIdentityEtlStrategy"
   }
 }

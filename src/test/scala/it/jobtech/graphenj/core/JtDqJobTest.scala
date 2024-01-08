@@ -128,7 +128,7 @@ class JtDqJobTest extends AnyFunSuite with Matchers with BeforeAndAfterEach with
       jtDestination,
       jtBadDestination,
       None,
-      "it.jobtech.jtetl.core.strategy.DqPeopleStrategy"
+      "it.jobtech.graphenj.core.strategy.DqPeopleStrategy"
     )
 
   private val jtConfigurationWithReport =
@@ -137,7 +137,7 @@ class JtDqJobTest extends AnyFunSuite with Matchers with BeforeAndAfterEach with
       jtDestination,
       jtBadDestination,
       Some(reportDestination),
-      "it.jobtech.jtetl.core.strategy.DqPeopleStrategy"
+      "it.jobtech.graphenj.core.strategy.DqPeopleStrategy"
     )
 
   override protected def beforeEach(): Unit = {

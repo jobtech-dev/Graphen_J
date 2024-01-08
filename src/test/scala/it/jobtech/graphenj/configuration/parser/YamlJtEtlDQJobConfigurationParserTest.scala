@@ -100,7 +100,7 @@ class YamlJtEtlDQJobConfigurationParserTest extends AnyFunSuite with Matchers wi
         |    partitionKeys:
         |    - field1
         |    - field2
-        |etlStrategyClass: it.jobtech.jtetl.core.strategy.JtIdentityStrategy
+        |etlStrategyClass: it.jobtech.graphenj.core.strategy.JtIdentityStrategy
         |dqStrategyClass: my_strategy""".stripMargin
 
     val expectedRes = JtEtlDQJobConfiguration(
@@ -181,7 +181,7 @@ class YamlJtEtlDQJobConfigurationParserTest extends AnyFunSuite with Matchers wi
             .Format("parquet", Map("path" -> "report_destination_path"), SaveMode.Append, List("field1", "field2"))
         )
       ),
-      "it.jobtech.jtetl.core.strategy.JtIdentityStrategy",
+      "it.jobtech.graphenj.core.strategy.JtIdentityStrategy",
       "my_strategy"
     )
     val res         = parseYamlConfig[JtEtlDQJobConfiguration](yml)

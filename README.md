@@ -1,4 +1,4 @@
-# Graphen_J #
+![](doc/assets/Graphen_J.svg)
 
 Graphen_J is a framework written in the Scala language, built on top of Apache Spark
 and [Deequ](https://github.com/awslabs/deequ) to perform EL, ETL and Data Quality processes for large datasets.

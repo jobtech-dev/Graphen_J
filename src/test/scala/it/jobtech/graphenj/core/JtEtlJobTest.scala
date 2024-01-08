@@ -104,7 +104,7 @@ class JtEtlJobTest extends AnyFunSuite with Matchers with BeforeAndAfterEach wit
   )
 
   private val jtConfiguration =
-    JtEtlJobConfiguration(jtSources, jtDestination, "it.jobtech.jtetl.core.strategy.PeopleEtlStrategy")
+    JtEtlJobConfiguration(jtSources, jtDestination, "it.jobtech.graphenj.core.strategy.PeopleEtlStrategy")
 
   override protected def beforeEach(): Unit = {
     ss.close()
@@ -226,7 +226,7 @@ class JtEtlJobTest extends AnyFunSuite with Matchers with BeforeAndAfterEach wit
     )
 
     val jtWrongConfiguration =
-      JtEtlJobConfiguration(jtSources, jtWrongDestination, "it.jobtech.jtetl.core.strategy.PeopleEtlStrategy")
+      JtEtlJobConfiguration(jtSources, jtWrongDestination, "it.jobtech.graphenj.core.strategy.PeopleEtlStrategy")
 
     // writing source tables
     require(
@@ -275,7 +275,7 @@ class JtEtlJobTest extends AnyFunSuite with Matchers with BeforeAndAfterEach wit
     )
 
     val jtWrongConfiguration =
-      JtEtlJobConfiguration(jtSources, jtWrongDestination, "it.jobtech.jtetl.core.strategy.PeopleEtlStrategy")
+      JtEtlJobConfiguration(jtSources, jtWrongDestination, "it.jobtech.graphenj.core.strategy.PeopleEtlStrategy")
 
     // writing source tables
     require(

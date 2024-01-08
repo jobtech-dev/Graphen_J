@@ -449,7 +449,7 @@ class JsonGeneralConfigurationParsing extends AnyFunSuite with Matchers with Jso
         |      "dbName": "destination_db",
         |      "tableName": "destination_table",
         |      "mode": "Custom",
-        |      "integrationTableFunctionClass": "it.jobtech.jtetl.application.PeopleIntegrationTableFunction",
+        |      "integrationTableFunctionClass": "it.jobtech.graphenj.application.PeopleIntegrationTableFunction",
         |      "provider": "iceberg",
         |      "tableProperties": {
         |        "write.format.default": "parquet",
@@ -468,7 +468,7 @@ class JsonGeneralConfigurationParsing extends AnyFunSuite with Matchers with Jso
         "destination_db",
         "destination_table",
         Custom,
-        Some("it.jobtech.jtetl.application.PeopleIntegrationTableFunction"),
+        Some("it.jobtech.graphenj.application.PeopleIntegrationTableFunction"),
         Seq.empty,
         Some(Iceberg),
         Map("write.format.default" -> "parquet", "format-version" -> "2", "write.parquet.compression-codec" -> "lz4"),

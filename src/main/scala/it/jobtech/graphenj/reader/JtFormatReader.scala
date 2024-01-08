@@ -11,7 +11,7 @@ import it.jobtech.graphenj.configuration.model.bookmark.{
   JtBookmarkStorageDetail
 }
 import it.jobtech.graphenj.models.JtBookmark
-import it.jobtech.graphenj.repositories.JtBookmarkRepositoryFsOs
+import it.jobtech.graphenj.repositories.{ JtBookmarkRepositoryFsOs, JtBookmarkRepositoryJDBC }
 import it.jobtech.graphenj.utils.JtError.ReadSourceError
 import org.apache.commons.lang3.time.DateUtils
 import org.apache.hadoop.fs.{ FileSystem, Path }
@@ -102,6 +102,8 @@ class JtFormatReader(implicit ss: SparkSession) extends Reader[Format] with Lazy
     Try(bookmarkStorage.detail match {
       case d: JtBookmarkStorageDetail.SparkTable =>
         ReaderUtils.readBookmarksSparkTable(new JtBookmarkRepositoryFsOs(d), bookmarkOpt)
+      case d: JtBookmarkStorageDetail.Database   =>
+        ReaderUtils.readBookmarksSparkTable(new JtBookmarkRepositoryJDBC(d), bookmarkOpt)
       case _                                     =>
         throw new IllegalArgumentException(s"Not supported bookmark storage type: ${bookmarkStorage.storageType}")
     })

@@ -95,6 +95,6 @@
         ]
       }
     },
-    "dqStrategyClass": "it.jobtech.jtetl.core.strategy.PeopleDqStrategy"
+    "dqStrategyClass": "it.jobtech.graphenj.core.strategy.PeopleDqStrategy"
   }
 }

@@ -129,7 +129,7 @@
         ]
       }
     },
-    "etlStrategyClass": "it.jobtech.jtetl.core.strategy.JtIdentityEtlStrategy",
-    "dqStrategyClass": "it.jobtech.jtetl.core.strategy.PeopleDqStrategy"
+    "etlStrategyClass": "it.jobtech.graphenj.core.strategy.JtIdentityEtlStrategy",
+    "dqStrategyClass": "it.jobtech.graphenj.core.strategy.PeopleDqStrategy"
   }
 }

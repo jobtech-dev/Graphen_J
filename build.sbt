@@ -5,7 +5,7 @@ ThisBuild / versionScheme := Some("early-semver")
 Test / parallelExecution := false
 
 lazy val root = (project in file("."))
-  .settings(name := "jtETL")
+  .settings(name := "Graphen_J")
   .settings(inThisBuild(Settings.projectSettings))
   .settings(
     scalacOptions ++= Seq(
@@ -22,7 +22,7 @@ lazy val root = (project in file("."))
   .enablePlugins(BuildInfoPlugin)
   .settings(
     buildInfoKeys    := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion),
-    buildInfoPackage := "it.jobtech.jtetl"
+    buildInfoPackage := "it.jobtech.graphenj"
   )
   .settings(libraryDependencies ++= Dependencies.core_deps)
   .settings(libraryDependencies ++= Dependencies.test_deps)

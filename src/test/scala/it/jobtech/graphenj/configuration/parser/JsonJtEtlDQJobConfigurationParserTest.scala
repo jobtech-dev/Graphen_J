@@ -131,7 +131,7 @@ class JsonJtEtlDQJobConfigurationParserTest extends AnyFunSuite with Matchers wi
         |      ]
         |    }
         |  },
-        |  "etlStrategyClass": "it.jobtech.jtetl.core.strategy.JtIdentityStrategy",
+        |  "etlStrategyClass": "it.jobtech.graphenj.core.strategy.JtIdentityStrategy",
         |  "dqStrategyClass": "my_strategy"
         |}""".stripMargin
 
@@ -215,7 +215,7 @@ class JsonJtEtlDQJobConfigurationParserTest extends AnyFunSuite with Matchers wi
             .Format("parquet", Map("path" -> "report_destination_path"), SaveMode.Append, List("field1", "field2"))
         )
       ),
-      "it.jobtech.jtetl.core.strategy.JtIdentityStrategy",
+      "it.jobtech.graphenj.core.strategy.JtIdentityStrategy",
       "my_strategy"
     )
     val res         = parseJsonConfig[JtEtlDQJobConfiguration](json)

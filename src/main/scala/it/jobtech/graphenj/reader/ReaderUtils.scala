@@ -1,9 +1,14 @@
 package it.jobtech.graphenj.reader
 
 import it.jobtech.graphenj.configuration.model._
-import it.jobtech.graphenj.configuration.model.bookmark.{ JtBookmarkDate, JtBookmarkInt, JtBookmarkLong }
+import it.jobtech.graphenj.configuration.model.bookmark.{
+  JtBookmarkDate,
+  JtBookmarkInt,
+  JtBookmarkLong,
+  JtBookmarkStorageDetail
+}
 import it.jobtech.graphenj.models.JtBookmark
-import it.jobtech.graphenj.repositories.JtBookmarkRepositoryFsOs
+import it.jobtech.graphenj.repositories.JtBookmarkRepository
 
 object ReaderUtils {
 
@@ -15,8 +20,8 @@ object ReaderUtils {
     * @return
     *   Option[ JtBookmark[_ >: Int with Long with String] ]
     */
-  def readBookmarksSparkTable(
-    repository: JtBookmarkRepositoryFsOs,
+  def readBookmarksSparkTable[D <: JtBookmarkStorageDetail](
+    repository: JtBookmarkRepository[D],
     bookmarkOpt: JtBookmarkDetail
   ): Option[JtBookmark[_ >: Int with Long with String]] = {
     bookmarkOpt.bookmarkFieldType match {

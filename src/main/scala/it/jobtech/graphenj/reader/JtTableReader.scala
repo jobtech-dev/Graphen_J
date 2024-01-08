@@ -9,7 +9,7 @@ import it.jobtech.graphenj.configuration.model.bookmark.{
   JtBookmarkLong,
   JtBookmarkStorageDetail
 }
-import it.jobtech.graphenj.repositories.JtBookmarkRepositoryFsOs
+import it.jobtech.graphenj.repositories.{ JtBookmarkRepositoryFsOs, JtBookmarkRepositoryJDBC }
 import it.jobtech.graphenj.utils.JtError.ReadSourceError
 import org.apache.spark.sql._
 import org.apache.spark.sql.functions.{ col, lit, unix_timestamp }
@@ -55,6 +55,8 @@ class JtTableReader(implicit ss: SparkSession) extends Reader[SparkTable] with L
     Try(bookmarkStorage.detail match {
       case d: JtBookmarkStorageDetail.SparkTable =>
         ReaderUtils.readBookmarksSparkTable(new JtBookmarkRepositoryFsOs(d), bookmarkDetail)
+      case d: JtBookmarkStorageDetail.Database   =>
+        ReaderUtils.readBookmarksSparkTable(new JtBookmarkRepositoryJDBC(d), bookmarkDetail)
       case _                                     =>
         throw new IllegalArgumentException(s"Not supported bookmark storage type: $bookmarkStorage.storageType")
     }) match {

@@ -146,8 +146,8 @@ class JtEtlDqJobTest extends AnyFunSuite with Matchers with BeforeAndAfterEach w
       jtDestination,
       jtBadDestination,
       None,
-      "it.jobtech.jtetl.core.strategy.PeopleEtlStrategy",
-      "it.jobtech.jtetl.core.strategy.DqPeopleStrategy"
+      "it.jobtech.graphenj.core.strategy.PeopleEtlStrategy",
+      "it.jobtech.graphenj.core.strategy.DqPeopleStrategy"
     )
 
   private val jtConfigurationWithReport =
@@ -156,8 +156,8 @@ class JtEtlDqJobTest extends AnyFunSuite with Matchers with BeforeAndAfterEach w
       jtDestination,
       jtBadDestination,
       Some(reportDestination),
-      "it.jobtech.jtetl.core.strategy.PeopleEtlStrategy",
-      "it.jobtech.jtetl.core.strategy.DqPeopleStrategy"
+      "it.jobtech.graphenj.core.strategy.PeopleEtlStrategy",
+      "it.jobtech.graphenj.core.strategy.DqPeopleStrategy"
     )
 
   override protected def beforeEach(): Unit = {
@@ -286,8 +286,8 @@ class JtEtlDqJobTest extends AnyFunSuite with Matchers with BeforeAndAfterEach w
         jtWrongDestination,
         jtBadDestination,
         None,
-        "it.jobtech.jtetl.core.strategy.PeopleEtlStrategy",
-        "it.jobtech.jtetl.core.strategy.PeopleDqEtlDqTestStrategy"
+        "it.jobtech.graphenj.core.strategy.PeopleEtlStrategy",
+        "it.jobtech.graphenj.core.strategy.PeopleDqEtlDqTestStrategy"
       )
 
     // writing source tables
@@ -344,8 +344,8 @@ class JtEtlDqJobTest extends AnyFunSuite with Matchers with BeforeAndAfterEach w
         jtWrongDestination,
         jtBadDestination,
         None,
-        "it.jobtech.jtetl.core.strategy.PeopleEtlStrategy",
-        "it.jobtech.jtetl.core.strategy.PeopleDqEtlDqTestStrategy"
+        "it.jobtech.graphenj.core.strategy.PeopleEtlStrategy",
+        "it.jobtech.graphenj.core.strategy.PeopleDqEtlDqTestStrategy"
       )
 
     // writing source tables
