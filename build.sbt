@@ -27,16 +27,17 @@ lazy val root = (project in file("."))
   .settings(libraryDependencies ++= Dependencies.core_deps)
   .settings(libraryDependencies ++= Dependencies.test_deps)
 
-publishMavenStyle := true
-
 enablePlugins(JavaAppPackaging)
 
-assembly / assemblyMergeStrategy := {
+assembly / assemblyMergeStrategy   := {
   case PathList("META-INF", _*) => MergeStrategy.discard
   case _                        => MergeStrategy.first
 }
 
-assembly / assemblyShadeRules    := Seq(
+assembly / assemblyShadeRules      := Seq(
   ShadeRule.rename("shapeless.**" -> "new_shapeless.@1").inAll,
   ShadeRule.rename("cats.kernel.**" -> s"new_cats.kernel.@1").inAll
 )
+
+ThisBuild / sonatypeCredentialHost := "s01.oss.sonatype.org"
+sonatypeRepository                 := "https://s01.oss.sonatype.org/service/local"

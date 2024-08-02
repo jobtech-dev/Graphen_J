@@ -1,5 +1,5 @@
-import sbt.Def
-import sbt.Keys.{ organization, scalaVersion, version }
+import sbt.Keys.{ homepage, organization, scalaVersion, version }
+import sbt.url
 
 object Settings {
 
@@ -8,10 +8,11 @@ object Settings {
   lazy val jtSparkVersion: String =
     sys.props.getOrElse("graphenj.spark.version", SPARK_VERSION)
 
-  lazy val projectSettings: Seq[Def.Setting[String]] = Seq(
+  lazy val projectSettings = Seq(
     organization := "it.jobtech",
-    scalaVersion := "2.12.17",
-    version      := s"0.2.0-spark-${jtSparkVersion.split("\\.").take(2).mkString(".")}-alpha"
+    homepage     := Some(url("https://github.com/sbt/sbt-ci-release")),
+    scalaVersion := "2.12.17"
+    // version      := s"0.2.0-spark-${jtSparkVersion.split("\\.").take(2).mkString(".")}-alpha"
   )
 
 }
