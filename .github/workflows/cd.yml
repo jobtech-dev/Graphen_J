@@ -1,0 +1,167 @@
+name: Continuous Deployment
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "version tag"
+        required: false
+        type: string
+
+env:
+  JAVA_VERSION: "8"
+  JAVA_DISTRIBUTION: "corretto"
+  SCALA_SETTINGS_FILE: "project/Settings.scala"
+
+jobs:
+  generate-changelog:
+    name: Generate changelog
+    runs-on: ubuntu-latest
+    outputs:
+      new_tag: ${{ steps.new-release-tag.outputs.tag_name }}
+      release_body: ${{ steps.git-cliff-release.outputs.content }}
+      release_type: ${{ steps.new-release-type.outputs.release_type }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Set the release version
+        id: new-release-tag
+        shell: bash
+        run: echo "tag_name=${{ inputs.tag || '${GITHUB_REF:11}' }}" >> $GITHUB_OUTPUT
+
+      - name: Set the release type
+        id: new-release-type
+        shell: bash
+        run: |
+          echo "release_type=${RELEASE_TYPE}" >> $GITHUB_OUTPUT
+          echo "release_type=${RELEASE_TYPE}" >> $GITHUB_ENV
+        env:
+          RELEASE_TYPE: ${{ contains(github.ref, '-') && 'PRE_RELEASE' || 'STANDARD_RELEASE' }}
+
+      - name: Generate a changelog file to update the current one
+        uses: orhun/git-cliff-action@v3
+        id: git-cliff
+        with:
+          config: cliff.toml
+          args: -vv --no-exec --github-repo ${{ github.repository }}
+        env:
+          OUTPUT: CHANGELOG.md
+
+      - name: Generate a changelog for the release
+        uses: orhun/git-cliff-action@v3
+        id: git-cliff-release
+        with:
+          config: cliff.toml
+          args: -vv --latest --no-exec --github-repo ${{ github.repository }}
+        env:
+          OUTPUT: CHANGELOG-RELEASE.md
+
+      - name: Print the changelog
+        run: cat "${{ steps.git-cliff.outputs.changelog }}"
+
+      - name: Commit and push version change
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+          set +e
+          git add CHANGELOG.md
+          git commit -m "Update changelog"
+          git push origin HEAD:master
+
+  build:
+    name: Build package
+    runs-on: ubuntu-latest
+    needs:
+      - generate-changelog
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install Corretto JDK + sbt
+        uses: actions/setup-java@v4
+        with:
+          distribution: ${{ env.JAVA_DISTRIBUTION }}
+          java-version: ${{ env.JAVA_VERSION }}
+          cache: sbt
+
+      - name: Build JAR package
+        run: sbt assembly
+
+      - name: Save Scala dependencies version
+        id: build-destination
+        run: |
+          SPARK_VERSION=$(grep -oP 'lazy val SPARK_VERSION\s*=\s*"\K[^"]+' ${{ env.SCALA_SETTINGS_FILE }})
+          MINOR_SPARK_VERSION=$(echo ${SPARK_VERSION} | grep -Eo '[0-9]\.[0-9]+')
+          SCALA_VERSION=$(grep -oP 'scalaVersion\s*:=\s*"\K[^"]+' ${{ env.SCALA_SETTINGS_FILE }})
+          MINOR_SCALA_VERSION=$(echo ${SCALA_VERSION} | grep -Eo '[0-9]\.[0-9]+')
+          echo "minor_scala_version=${MINOR_SCALA_VERSION}" >> $GITHUB_OUTPUT
+      
+      - name: Save JAR in artifacts
+        uses: actions/upload-artifact@v4
+        id: artifact-upload-jar
+        with:
+          name: Graphen_J-assembly-jar
+          path: ${{ github.workspace }}/target/scala-${{ steps.build-destination.outputs.minor_scala_version }}/*.jar
+          if-no-files-found: error
+          retention-days: 7
+
+  publish:
+    name: Publish a GitHub release
+    runs-on: ubuntu-latest
+    needs:
+      - generate-changelog
+      - build
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Download JAR from artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: Graphen_J-assembly-jar
+          path: ${{ github.workspace }}
+
+      - name: Upload the release
+        if: ${{ needs.generate-changelog.outputs.release_type == 'STANDARD_RELEASE' }}
+        uses: softprops/action-gh-release@v2
+        id: publish-release
+        with:
+          body: "${{ needs.generate-changelog.outputs.release_body }}"
+          name: "Release v${{ needs.generate-changelog.outputs.new_tag }}"
+          files: |
+            Graphen_J-*.jar
+          prerelease: false
+          tag_name: "v${{ needs.generate-changelog.outputs.new_tag }}"
+          make_latest: true
+
+      - name: Upload the pre-release
+        if: ${{ needs.generate-changelog.outputs.release_type == 'PRE_RELEASE' }}
+        uses: softprops/action-gh-release@v2
+        id: publish-pre-release
+        with:
+          body: "${{ needs.generate-changelog.outputs.release_body }}"
+          name: "Pre release v${{ needs.generate-changelog.outputs.new_tag }}"
+          files: |
+            Graphen_J-*.jar
+          prerelease: true
+          tag_name: "v${{ needs.generate-changelog.outputs.new_tag }}"
+      
+      - name: Print new release new url
+        if: ${{ needs.generate-changelog.outputs.release_type == 'STANDARD_RELEASE' }}
+        run: echo "Release URL --> ${{ steps.publish-release.outputs.url }}"
+
+      - name: Print new pre release new url
+        if: ${{ needs.generate-changelog.outputs.release_type == 'PRE_RELEASE' }}
+        run: echo "Release URL --> ${{ steps.publish-pre-release.outputs.url }}"

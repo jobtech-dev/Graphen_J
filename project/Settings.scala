@@ -3,10 +3,10 @@ import sbt.Keys.{ organization, scalaVersion, version }
 
 object Settings {
 
-  lazy val SPARK_311 = "3.1.1"
+  lazy val SPARK_VERSION = "3.1.1"
 
   lazy val jtSparkVersion: String =
-    sys.props.getOrElse("graphenj.spark.version", SPARK_311)
+    sys.props.getOrElse("graphenj.spark.version", SPARK_VERSION)
 
   lazy val projectSettings: Seq[Def.Setting[String]] = Seq(
     organization := "it.jobtech",
