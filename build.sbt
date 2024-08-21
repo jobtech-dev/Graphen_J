@@ -1,3 +1,12 @@
+import xerial.sbt.Sonatype.sonatypeCentralHost
+
+ThisBuild / sonatypeCredentialHost := sonatypeCentralHost
+publishTo                          := sonatypePublishToBundle.value
+publishMavenStyle                  := true
+
+pgpPassphrase := Settings.gpgPassphrase
+pgpSecretRing := file(Settings.pgpSecretFilePath)
+
 ThisBuild / versionScheme := Some("early-semver")
 
 // the tests must be performed sequentially otherwise there will be problems due to the closing and recreating of the
@@ -29,15 +38,12 @@ lazy val root = (project in file("."))
 
 enablePlugins(JavaAppPackaging)
 
-assembly / assemblyMergeStrategy   := {
+assembly / assemblyMergeStrategy := {
   case PathList("META-INF", _*) => MergeStrategy.discard
   case _                        => MergeStrategy.first
 }
 
-assembly / assemblyShadeRules      := Seq(
+assembly / assemblyShadeRules    := Seq(
   ShadeRule.rename("shapeless.**" -> "new_shapeless.@1").inAll,
   ShadeRule.rename("cats.kernel.**" -> s"new_cats.kernel.@1").inAll
 )
-
-ThisBuild / sonatypeCredentialHost := "s01.oss.sonatype.org"
-sonatypeRepository                 := "https://s01.oss.sonatype.org/service/local"
