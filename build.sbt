@@ -10,8 +10,6 @@ pgpSecretRing := file(Settings.pgpSecretFilePath)
 
 credentials += Credentials("Sonatype Nexus Repository Manager", sonatypeCentralHost, sonatypeUsername, sonatypePassword)
 
-ThisBuild / versionScheme := Some("early-semver")
-
 // the tests must be performed sequentially otherwise there will be problems due to the closing and recreating of the
 // spark session in the different tests
 Test / parallelExecution := false

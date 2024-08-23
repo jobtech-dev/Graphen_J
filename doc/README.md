@@ -17,7 +17,7 @@ The configurations to be specified are the following:
 - `jobConfiguration`: configurations for the job you want to perform [ETL](etl_job_configuration.md)
   , [DQ](dq_job_configuration.md), [ETL_DQ](etl_dq_job_configuration.md)
 
-## [How to define a custom strategy](how_to_define_an_etl_strategy.md)
+## [How to define a custom etl strategy](how_to_define_an_etl_strategy.md)
 
 ## [How to define a data quality strategy](how_to_define_a_dq_strategy.md)
 

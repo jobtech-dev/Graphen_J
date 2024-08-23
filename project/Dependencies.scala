@@ -10,7 +10,12 @@ object Dependencies {
   private val nameOfVersion               = "4.0.0"
   private val commonLang3Version          = "3.12.0"
 
-  private val sparkIcebergPackage = Settings.jtSparkVersion match {
+  lazy val SPARK_VERSION = "3.1.1"
+
+  lazy val jtSparkVersion: String =
+    sys.props.getOrElse("graphenj.spark.version", SPARK_VERSION)
+
+  private val sparkIcebergPackage = jtSparkVersion match {
     case version if version.startsWith("3.3") => "iceberg-spark-runtime-3.3"
     case version if version.startsWith("3.2") => "iceberg-spark-runtime-3.2"
     case version if version.startsWith("3.1") => "iceberg-spark-runtime-3.1"
@@ -18,10 +23,10 @@ object Dependencies {
     case version                              => throw new IllegalArgumentException(s"Spark version ${version} not supported!")
   }
 
-  private val deequVersion = Settings.jtSparkVersion match {
-    case version if version.startsWith("3.3") => "2.0.3-spark-3.3"
-    case version if version.startsWith("3.2") => "2.0.1-spark-3.2"
-    case version if version.startsWith("3.1") => "2.0.0-spark-3.1"
+  private val deequVersion = jtSparkVersion match {
+    case version if version.startsWith("3.3") => "2.0.7-spark-3.3"
+    case version if version.startsWith("3.2") => "2.0.7-spark-3.2"
+    case version if version.startsWith("3.1") => "2.0.7-spark-3.1"
     case version if version.startsWith("3.0") => "1.2.2-spark-3.0"
     case version                              => throw new IllegalArgumentException(s"Spark version ${version} not supported!")
   }
@@ -31,10 +36,10 @@ object Dependencies {
   lazy val excludeScalanlp = ExclusionRule(organization = "org.scalanlp")
 
   // dependencies
-  lazy val sparkSql             = "org.apache.spark"           %% "spark-sql"         % Settings.jtSparkVersion % Provided
-  lazy val sparkAvro            = "org.apache.spark"           %% "spark-avro"        % Settings.jtSparkVersion % Provided
-  lazy val sparkHive            = "org.apache.spark"           %% "spark-hive"        % Settings.jtSparkVersion % Provided
-  lazy val sparkIceberg         = "org.apache.iceberg"         %% sparkIcebergPackage % icebergVersion          % Provided
+  lazy val sparkSql             = "org.apache.spark"           %% "spark-sql"         % jtSparkVersion % Provided
+  lazy val sparkAvro            = "org.apache.spark"           %% "spark-avro"        % jtSparkVersion % Provided
+  lazy val sparkHive            = "org.apache.spark"           %% "spark-hive"        % jtSparkVersion % Provided
+  lazy val sparkIceberg         = "org.apache.iceberg"         %% sparkIcebergPackage % icebergVersion % Provided
   lazy val typeSafeScalaLogging = "com.typesafe.scala-logging" %% "scala-logging"     % typeSafeScalaLoggingVersion
   lazy val catsCore             = "org.typelevel"              %% "cats-core"         % catsVersion
   lazy val circeCore            = "io.circe"                   %% "circe-core"        % circeVersion
