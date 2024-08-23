@@ -8,7 +8,9 @@ object Settings {
   lazy val jtSparkVersion: String =
     sys.props.getOrElse("graphenj.spark.version", SPARK_VERSION)
 
-  lazy val gpgPassphrase: Option[Array[Char]] = sys.env.get("GPG_PASSPHRASE").map(x => x.toCharArray)
+  lazy val sonatypeUsername                   = sys.env.getOrElse("SONATYPE_USERNAME", "")
+  lazy val sonatypePassword                   = sys.env.getOrElse("SONATYPE_PASSWORD", "")
+  lazy val gpgPassphrase: Option[Array[Char]] = sys.env.get("PGP_PASSPHRASE").map(x => x.toCharArray)
   lazy val pgpSecretFilePath: String          = sys.env.getOrElse("PGP_SECRET_RING_PATH", "")
 
   lazy val projectSettings = Seq(

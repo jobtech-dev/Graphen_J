@@ -1,3 +1,4 @@
+import Settings.{ sonatypePassword, sonatypeUsername }
 import xerial.sbt.Sonatype.sonatypeCentralHost
 
 ThisBuild / sonatypeCredentialHost := sonatypeCentralHost
@@ -6,6 +7,8 @@ publishMavenStyle                  := true
 
 pgpPassphrase := Settings.gpgPassphrase
 pgpSecretRing := file(Settings.pgpSecretFilePath)
+
+credentials += Credentials("Sonatype Nexus Repository Manager", sonatypeCentralHost, sonatypeUsername, sonatypePassword)
 
 ThisBuild / versionScheme := Some("early-semver")
 
